@@ -1,7 +1,7 @@
 {
-  "versionCode": 50,
-  "versionName": "2.0",
+  "versionCode": 1,
+  "versionName": "1.0",
   "apkUrl": "https://raw.githubusercontent.com/properfixerit/PFAPK/main/PFExam/Exam.apk",
   "apkFileName": "Exam.apk",
-  "sha256": "b3b2de474656c48159ff2f5aae5a9bcb8a51873cd70279adde8ed3a44c813965"
+  "sha256": "66a11ed0982080eacf8b09db1101a8f07c4a04f8b693d0617bcd3f528b4d6afb"
 }
