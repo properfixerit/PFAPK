@@ -10,7 +10,7 @@ if not exist "%ADB%" (
 )
 
 set "APK=%TEMP%\PFControl.apk"
-echo Downloading the latest PFControl.apk from PFExam...
+echo Downloading the latest PFControl.apk from PFControl...
 powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "try { Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/properfixerit/PFAPK/main/PFControl/PFControl.apk' -OutFile '%APK%' -ErrorAction Stop } catch { exit 1 }"
 if errorlevel 1 (
     echo APK download failed.
