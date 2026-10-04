@@ -1,7 +1,7 @@
 {
   "versionCode": 51,
   "versionName": "2.1",
-  "apkUrl": "https://raw.githubusercontent.com/properfixerit/PFAPK/main/PFControl/Exam.apk",
-  "apkFileName": "Exam.apk",
+  "apkUrl": "https://raw.githubusercontent.com/properfixerit/PFAPK/main/PFControl/PFControl.apk",
+  "apkFileName": "PFControl.apk",
   "sha256": "2406b1660a3412ca0970a195dedaf78f3f10cd4d1c36046ca6216a084ef64266"
 }
