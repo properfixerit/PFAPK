@@ -1,7 +1,7 @@
-{
-  "versionCode": 2,
-  "versionName": "1.1",
-  "apkUrl": "https://raw.githubusercontent.com/properfixerit/PFAPK/main/PFControl/PFControl.apk",
-  "apkFileName": "PFControl.apk",
-  "sha256": "2bd2a80bae15ad4335b99e8eed377b42fcee04566400b2ea435b81281890620e"
+﻿{
+    "versionCode":  3,
+    "versionName":  "1.2",
+    "apkUrl":  "https://raw.githubusercontent.com/properfixerit/PFAPK/main/PFControl/PFControl.apk",
+    "apkFileName":  "PFControl.apk",
+    "sha256":  "75de7daf32edd34c7b8b6f7fa2904f35dbf81c5740aca15a18c9dce01b77c73a"
 }
