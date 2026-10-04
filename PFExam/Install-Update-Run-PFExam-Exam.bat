@@ -9,14 +9,8 @@ if not exist "%ADB%" (
     exit /b 1
 )
 
-set "APK=%~dp0Exam.apk"
-if exist "%APK%" goto install
-
-set "APK=%USERPROFILE%\Downloads\Exam.apk"
-if exist "%APK%" goto install
-
 set "APK=%TEMP%\Exam.apk"
-echo Exam.apk was not found beside this script or in Downloads. Downloading it now...
+echo Downloading the latest Exam.apk from PFExam...
 powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "try { Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/properfixerit/PFAPK/main/PFExam/Exam.apk' -OutFile '%APK%' -ErrorAction Stop } catch { exit 1 }"
 if errorlevel 1 (
     echo APK download failed.
