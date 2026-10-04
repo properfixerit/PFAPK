@@ -21,7 +21,7 @@ if errorlevel 1 (
 :install
 echo Using downloaded APK: "%APK%"
 
-"%ADB%" install -r "%APK%"
+"%ADB%" install -r -d "%APK%"
 if not errorlevel 1 goto launch
 
 echo.
