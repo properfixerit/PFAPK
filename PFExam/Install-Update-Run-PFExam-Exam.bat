@@ -1,5 +1,6 @@
 @echo off
-setlocal
+setlocal EnableDelayedExpansion
+cd /d "%~dp0"
 
 set "ADB=%LOCALAPPDATA%\Android\Sdk\platform-tools\adb.exe"
 
@@ -9,53 +10,86 @@ if not exist "%ADB%" (
     exit /b 1
 )
 
-set "APK=%TEMP%\Exam.apk"
-echo Downloading the latest Exam.apk from PFExam...
-powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "try { Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/properfixerit/PFAPK/main/PFExam/Exam.apk' -OutFile '%APK%' -ErrorAction Stop } catch { exit 1 }"
-if errorlevel 1 (
-    echo APK download failed.
+set "APK=%~dp0app\build\outputs\apk\debug\app-debug.apk"
+set "APP_PACKAGE=com.ijtc.pfexam"
+set "NO_INSTALL=0"
+if /I "%~1"=="noinstall" set "NO_INSTALL=1"
+if /I "%~1"=="--no-install" set "NO_INSTALL=1"
+if /I "%~1"=="/noinstall" set "NO_INSTALL=1"
+
+if "%NO_INSTALL%"=="0" if not exist "%APK%" (
+    echo Debug APK was not found: "%APK%"
     timeout /t 5 /nobreak >nul
     exit /b 1
 )
 
-:install
-echo Using downloaded APK: "%APK%"
-
-"%ADB%" install -r -d "%APK%"
-if not errorlevel 1 goto launch
-
-echo.
-echo Update failed. A different signing key may prevent installing over the existing app.
-echo Uninstalling Exam will erase its saved app data.
-choice /C YN /N /M "Uninstall Exam and install fresh? [Y/N] "
-if errorlevel 2 (
-    echo Installation cancelled.
-    timeout /t 5 /nobreak >nul
-    exit /b 1
+if "%NO_INSTALL%"=="0" (
+    echo Using App: "%APK%"
+    "%ADB%" shell pm list packages | findstr /I /X /C:"package:%APP_PACKAGE%" >nul
+    if errorlevel 1 (
+        echo Package %APP_PACKAGE% is not installed. Installing fresh.
+        "%ADB%" install "%APK%"
+        if errorlevel 1 goto installFailed
+    ) else (
+        echo Package %APP_PACKAGE% is installed. Overwriting it.
+        set "INSTALL_LOG=!TEMP!\pfexam-install-!RANDOM!-!RANDOM!.log"
+        "!ADB!" install -r -d "%APK%" >"!INSTALL_LOG!" 2>&1
+        set "INSTALL_RESULT=!ERRORLEVEL!"
+        type "!INSTALL_LOG!"
+        if "!INSTALL_RESULT!"=="0" goto installed
+        findstr /C:"INSTALL_FAILED_UPDATE_INCOMPATIBLE" "!INSTALL_LOG!" >nul
+        if errorlevel 1 (
+            del "!INSTALL_LOG!" >nul 2>nul
+            goto installFailed
+        )
+        echo.
+        echo The installed app uses a different signing key.
+        echo Uninstalling it will erase its local app data.
+        choice /C YN /N /M "Uninstall the existing app and install fresh? [Y/N] "
+        if errorlevel 2 (
+            del "!INSTALL_LOG!" >nul 2>nul
+            echo Fresh installation cancelled.
+            timeout /t 5 /nobreak >nul
+            exit /b 1
+        )
+        "%ADB%" uninstall "%APP_PACKAGE%"
+        if errorlevel 1 (
+            del "!INSTALL_LOG!" >nul 2>nul
+            goto installFailed
+        )
+        "%ADB%" install "%APK%"
+        if errorlevel 1 (
+            del "!INSTALL_LOG!" >nul 2>nul
+            goto installFailed
+        )
+        del "!INSTALL_LOG!" >nul 2>nul
+    )
 )
 
-"%ADB%" uninstall com.pf.exam
-if errorlevel 1 (
-    echo Could not uninstall Exam. Check the device connection and authorization.
-    timeout /t 5 /nobreak >nul
-    exit /b 1
-)
-
-"%ADB%" install "%APK%"
-if errorlevel 1 (
-    echo Fresh APK installation failed.
-    timeout /t 5 /nobreak >nul
-    exit /b 1
-)
-
+:installed
 :launch
-"%ADB%" shell monkey -p com.pf.exam 1
+if "%NO_INSTALL%"=="1" (
+    "%ADB%" shell pm list packages "%APP_PACKAGE%" | findstr /I /C:"%APP_PACKAGE%" >nul
+    if errorlevel 1 (
+        echo Package %APP_PACKAGE% is not installed on the connected device.
+        echo Run the installer first: Install-Update-Run.bat
+        timeout /t 5 /nobreak >nul
+        exit /b 1
+    )
+)
+
+"%ADB%" shell monkey -p %APP_PACKAGE% 1
 if errorlevel 1 (
     echo The app was installed, but could not be launched.
     timeout /t 5 /nobreak >nul
     exit /b 1
 )
 
-echo Exam was installed and launched successfully.
-timeout /t 3 /nobreak >nul
+echo App was launched successfully.
+if "%NO_INSTALL%"=="0" echo App was installed and launched successfully.
 exit /b 0
+
+:installFailed
+echo Installation failed. Check that the debug APK is valid and the device is connected.
+timeout /t 5 /nobreak >nul
+exit /b 1
