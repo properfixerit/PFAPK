@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="PFControl অ্যাপ ডাউনলোড করুন অথবা QR কোড স্ক্যান করে ইনস্টল করুন।"
+      content="অ্যাপ ডাউনলোড করুন অথবা QR কোড স্ক্যান করে ইনস্টল করুন।"
     />
     <meta name="theme-color" content="#f5f7fb" />
-    <title>PFControl অ্যাপ ডাউনলোড</title>
+    <title>অ্যাপ ডাউনলোড</title>
     <style>
       :root {
         color-scheme: light;
@@ -42,13 +42,6 @@
         background: #fff;
         box-shadow: 0 18px 50px rgb(28 43 73 / 8%);
         text-align: center;
-      }
-
-      .eyebrow {
-        margin: 0 0 8px;
-        color: #52627d;
-        font-size: clamp(0.85rem, 1.6vw, 1rem);
-        font-weight: 700;
       }
 
       h1 {
@@ -133,28 +126,64 @@
   </head>
   <body>
     <main>
-      <p class="eyebrow">PFControl</p>
-      <h1>PFControl অ্যাপ ইনস্টল করুন</h1>
-      <p class="version">সর্বশেষ সংস্করণ 1.1</p>
+      <h1>অ্যাপ ইনস্টল করুন</h1>
+      <p class="version" id="version">সংস্করণ লোড হচ্ছে...</p>
       <img
         class="qr"
-        src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https%3A%2F%2Fproperfixerit.github.io%2FPFAPK%2FPFControl%2F"
+        src="./qr.png"
         width="300"
         height="300"
-        alt="PFControl ওয়েব পেজ খোলার QR কোড"
+        alt="অ্যাপ ডাউনলোড পেজ খোলার QR কোড"
       />
       <p class="hint">অন্য একটি ডিভাইসের ক্যামেরা দিয়ে QR কোডটি স্ক্যান করুন।</p>
       <a
         class="download"
-        href="https://raw.githubusercontent.com/properfixerit/PFAPK/main/PFControl/PFControl.apk"
-        download="PFControl.apk"
+        href="https://raw.githubusercontent.com/properfixerit/PFAPK/main/PFControl/app-debug.apk"
+        download="app-debug.apk"
       >
-        PFControl.apk ডাউনলোড
+        app-debug.apk ডাউনলোড
       </a>
       <p class="note">
         ডাউনলোডের পর APK ফাইলটি খুলে ইনস্টল করুন। Android চাইলে এই উৎস থেকে ইনস্টলের
         অনুমতি দিন।
       </p>
     </main>
+    <script>
+      const versionElement = document.getElementById("version");
+
+      fetch("./update.json", { cache: "no-store" })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`update.json request failed: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((manifest) => {
+          const versionName =
+            typeof manifest.versionName === "string"
+              ? manifest.versionName.trim()
+              : "";
+          const versionCode = manifest.versionCode;
+          const versionDisplay =
+            typeof manifest.versionDisplay === "string"
+              ? manifest.versionDisplay.trim()
+              : "";
+          const expectedVersionDisplay =
+            `Version ${versionName} | Version Code ${versionCode}`;
+          if (
+            !versionName ||
+            !Number.isSafeInteger(versionCode) ||
+            versionCode < 1 ||
+            versionDisplay !== expectedVersionDisplay
+          ) {
+            throw new Error("update.json has invalid version information.");
+          }
+          versionElement.textContent = versionDisplay;
+        })
+        .catch((error) => {
+          console.error("Could not load the latest app version information.", error);
+          versionElement.textContent = "সংস্করণ তথ্য লোড করা যায়নি";
+        });
+    </script>
   </body>
 </html>
