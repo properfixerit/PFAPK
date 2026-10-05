@@ -134,7 +134,7 @@
   <body>
     <main>
       <h1>Exam অ্যাপ ইনস্টল করুন</h1>
-      <p class="version">সর্বশেষ সংস্করণ 1.2</p>
+      <p class="version" id="version">সংস্করণ লোড হচ্ছে...</p>
       <img
         class="qr"
         src="./Exam-QR.png"
@@ -155,5 +155,30 @@
         অনুমতি দিন।
       </p>
     </main>
+    <script>
+      const versionElement = document.getElementById("version");
+
+      fetch("./update.json", { cache: "no-store" })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`update.json request failed: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((manifest) => {
+          const versionName =
+            typeof manifest.versionName === "string"
+              ? manifest.versionName.trim()
+              : "";
+          if (!versionName) {
+            throw new Error("update.json has no valid versionName.");
+          }
+          versionElement.textContent = `সর্বশেষ সংস্করণ ${versionName}`;
+        })
+        .catch((error) => {
+          console.error("Could not load the latest app version.", error);
+          versionElement.textContent = "সংস্করণ তথ্য লোড করা যায়নি";
+        });
+    </script>
   </body>
 </html>
