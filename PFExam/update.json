@@ -1,7 +1,7 @@
 {
-    "versionCode":  16,
-    "versionName":  "1.4",
+    "versionCode":  17,
+    "versionName":  "1.5",
     "apkUrl":  "https://raw.githubusercontent.com/properfixerit/PFAPK/main/PFExam/app-debug.apk",
     "apkFileName":  "app-debug.apk",
-    "sha256":  "79743eab79de88a43045587a68aa74db033905527f3474dcc1520c413d2fc2c2"
+    "sha256":  "7c06c28662b2096b07291bbdbdccb52a7420ecfa606e8e8abb996e9de57ab381"
 }
