@@ -108,6 +108,32 @@
         outline-offset: 3px;
       }
 
+      .fallback-link {
+        display: inline-flex;
+        min-height: 44px;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin-top: 10px;
+        padding: 10px 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 12px;
+        color: #174ea6;
+        font-weight: 700;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+        text-decoration: none;
+      }
+
+      .fallback-link:hover {
+        background: #f4f7fc;
+      }
+
+      .fallback-link:focus-visible {
+        outline: 3px solid #172033;
+        outline-offset: 3px;
+      }
+
       .note {
         margin: clamp(12px, 2.5vw, 18px) 0 0;
         color: #68758c;
@@ -134,15 +160,17 @@
   <body>
     <main>
       <h1>RRE অ্যাপ ইনস্টল করুন</h1>
-      <p class="version" id="version" aria-live="polite">সংস্করণ লোড হচ্ছে...</p>
+      <p class="version" id="version" aria-live="polite">à¦¸à¦°à§à¦¬à¦¶à§‡à¦· à¦¸à¦‚à¦¸à§à¦•à¦°à¦£ 1.0 (Version code 1)</p>
       <img
         class="qr"
-        src="./qr.png"
+        src="./qr.png?v=1"
         width="300"
         height="300"
-        alt="অ্যাপ ডাউনলোড পেজের QR কোড"
+        alt="GitHub-এ RRE ফাইল খোলার বিকল্প QR কোড"
       />
-      <p class="hint">অন্য একটি ডিভাইসের ক্যামেরা দিয়ে QR কোডটি স্ক্যান করুন।</p>
+      <p class="hint">
+        QR কোড স্ক্যান করে GitHub-এ RRE ফাইল খুলুন। Pages লিংক না খুললেও এই বিকল্পটি ব্যবহার করুন।
+      </p>
       <a
         class="download"
         href="https://raw.githubusercontent.com/properfixerit/PFAPK/main/RRE/app-release.apk"
@@ -155,8 +183,11 @@
         অনুমতি দিন।
       </p>
       <p class="note">
-        <a href="https://properfixerit.github.io/PFAPK/RRE">
-          RRE ডাউনলোড পেজের লিংক
+        <a
+          class="fallback-link"
+          href="https://github.com/properfixerit/PFAPK/tree/main/RRE"
+        >
+          Pages না খুললে GitHub থেকে RRE ফাইল দেখুন
         </a>
       </p>
     </main>
