@@ -1,7 +1,7 @@
 {
-    "versionCode":  1,
-    "versionName":  "1.0",
+    "versionCode":  2,
+    "versionName":  "1.1",
     "apkUrl":  "https://raw.githubusercontent.com/properfixerit/PFAPK/main/RRE/app-release.apk",
     "apkFileName":  "app-release.apk",
-    "sha256":  "295a138db61d7fcbc458c94e4a4c3f7c012fff9883c4d1565ce206e96fe56613"
+    "sha256":  "655db920fb1444a287aa4036c8e2313d653222c7b94901efa8a1de8f9b3a5154"
 }
